@@ -16,6 +16,23 @@ function _runtime(){
     return $_mtime[1] + $_mtime[0];
 }
 
+
+/*
+    _html()函数表示对字符串进行HTML过滤显示，如果是数组按数组的方式进行过滤。
+    如果是单独的字符串，那么就按单独的字符串过滤。
+*/
+function _html($str){
+    if(is_array($str)){
+        foreach ($str as $key => $val){
+            $str[$key] = _html($val); //这里采用了递归
+        }
+    }else{
+        $str = htmlspecialchars($str);
+    }
+    return $str;
+}
+
+
 //JS弹窗函数
 function _alert_back($_info){
     echo "<script>alert('$_info');history.back();</script>";

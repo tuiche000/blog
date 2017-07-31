@@ -1,7 +1,10 @@
+<?php
+    $PATH = substr(dirname(__FILE__),0,-8);
+?>
 <header>
     <nav id="nav">
         <ul>
-            <li><a href="#">网站首页</a></li>
+            <li><a href="<?php echo $PATH."index.php"?>">网站首页</a></li>
             <li><a href="#">模板</a></li>
             <li><a href="#">关于我们</a></li>
             <li><a href="#">我们的故事</a></li>

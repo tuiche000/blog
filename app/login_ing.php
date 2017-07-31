@@ -27,5 +27,5 @@ if(! $row )
 
 $_SESSION['username'] = $row['username'];
 
-echo "<script>alert('登陆成功');window.location.href='../index.php'</script>";
+echo "<script>alert('登陆成功');window.location.href='../templates/member.php'</script>";
 mysqli_close($conn);

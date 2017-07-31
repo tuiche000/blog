@@ -16,7 +16,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 define('ROOT_PATH',substr(dirname(__FILE__),0,-8));
 
 //创建一个自动转移状态的常量
-define('GPC',get_magic_quotes_gpc());
+//define('GPC',get_magic_quotes_gpc());
 
 //拒绝PHP低版本
 if(PHP_VERSION<'5.4.45'){
@@ -27,7 +27,7 @@ if(PHP_VERSION<'5.4.45'){
 session_start();
 
 //引入核心函数库
-//require ROOT_PATH.'includes/global.func.php';
+require ROOT_PATH.'includes/global.func.php';
 //require ROOT_PATH.'includes/mysql.func.php';
 
 //执行耗时
