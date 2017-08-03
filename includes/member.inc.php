@@ -4,11 +4,11 @@
         <div class="block-content">
             <div class="font-w600 font-s12 text-uppercase text-muted push-10">账户管理</div>
             <ul class="nav nav-pills nav-stacked push">
-                <li class="active">
+                <li>
                     <a href="javascript:void(0)"><i class="fa fa-fw fa-newspaper-o push-5-r"></i> 个人信息</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"><span class="badge pull-right">3</span><i class="fa fa-fw fa-envelope push-5-r"></i> 修改资料</a>
+                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal-contact-edit"><span class="badge pull-right">3</span><i class="fa fa-fw fa-envelope push-5-r"></i> 修改资料</a>
                 </li>
             </ul>
             <div class="font-w600 font-s12 text-uppercase text-muted push-10">其他管理</div>

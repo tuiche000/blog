@@ -5,7 +5,6 @@
  * Date: 2017/7/1
  * Time: 18:24
  */
-session_start();
 include '../includes/common.inc.php';
 
 $username = $_POST['username'];

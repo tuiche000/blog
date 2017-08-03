@@ -1,6 +1,3 @@
-<?php
-require "../includes/common.inc.php";
-?>
 <!-- Sidebar -->
 <nav id="sidebar">
     <!-- Sidebar Scroll Container -->
@@ -62,8 +59,15 @@ require "../includes/common.inc.php";
             <div class="side-content side-content-full">
                 <ul class="nav-main">
                     <li>
-                        <a href="<?php echo ROOT_PATH."index.php"?>"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">网站首页</span></a>
+                        <a href="../index.php"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">网站首页</span></a>
                     </li>
+                    <li>
+                        <a href="../templates/member.php"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">个人中心</span></a>
+                    </li>
+                    <li>
+                        <a href="../templates/contacts.php"><i class="si si-speedometer"></i><span class="sidebar-mini-hide">我们的博客</span></a>
+                    </li>
+
                     <li class="nav-main-heading"><span class="sidebar-mini-hide">模板</span></li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">关于我们</span></a>
@@ -145,26 +149,6 @@ require "../includes/common.inc.php";
                             </li>
                             <li>
                                 <a href="base_ui_color_themes.html">Color Themes</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid"></i><span class="sidebar-mini-hide">我们的故事</span></a>
-                        <ul>
-                            <li>
-                                <a href="base_tables_styles.html">Styles</a>
-                            </li>
-                            <li>
-                                <a href="base_tables_responsive.html">Responsive</a>
-                            </li>
-                            <li>
-                                <a href="base_tables_tools.html">Tools</a>
-                            </li>
-                            <li>
-                                <a href="base_tables_pricing.html">Pricing</a>
-                            </li>
-                            <li>
-                                <a href="base_tables_datatables.html">DataTables</a>
                             </li>
                         </ul>
                     </li>

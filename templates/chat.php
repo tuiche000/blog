@@ -1,30 +1,55 @@
 <?php
 require "../includes/common.inc.php";
-//分页模块
-if(isset($_GET['page'])){
-    $page = $_GET['page'];
-    if(empty($page) || $page < 0 || !is_numeric($page)){
-        $page = 1;
-    }else{
-        $page = intval($page);
+//判断是否登录了
+if($_SESSION['username']){
+    //写短信
+    if($_GET['action'] == "write"){
+        $message = [];
+        $message['toUser'] = $_POST['toUser'];
+        $message['formUser'] = $_SESSION['username'];
+        $message['content'] = $_POST['content'];
+        print_r($message);
+        $sql1 = "INSERT INTO chat
+(
+chat_toUser,
+chat_fromUser,
+chat_content,
+chat_date
+)
+VALUE 
+(
+'{$message['toUser']}',
+'{$message['formUser']}',
+'{$message['content']}',
+NOW()
+)
+";
+        if ($conn->query($sql1) === TRUE) {
+            echo "新记录插入成功";
+        } else {
+            exit( "Error: " . $sql . "<br>" . $conn->error );
+        }
+
+        exit();
     }
-
+    //获取数据
+    if(isset($_GET['id'])){
+        $sql = "SELECT username FROM user WHERE id='{$_GET['id']}' LIMIT 1";
+        $res = $conn->query($sql);
+        $rows = $res->fetch_assoc();
+        if($rows){
+            $html = [];
+            $html['toUser'] = $rows['username'];
+            $html = _html($html);
+        }else{
+            echo "<script>alert('不存在此用户1');window.location.href='contacts.php'</script>";
+        }
+    }else{
+        echo "<script>alert('不存在此用户2');window.location.href='contacts.php'</script>";
+    }
 }else{
-    $page = 1;
+    echo "<script>alert('未登录');window.location.href='login.php'</script>";
 }
-$num_query = mysqli_query($conn,"SELECT id FROM user");
-$num = mysqli_num_rows($num_query);
-$pageSize = 8;
-
-//获得数据的总和
-$pageList = ceil($num / $pageSize);
-if($page > $pageList){
-    $page = $pageList;
-}
-$pageNum = isset($page)?($page - 1) * $pageSize : 1;
-$sql = "SELECT * FROM user ORDER BY id ASC LIMIT $pageNum,$pageSize";
-$res = mysqli_query($conn,$sql);
-
 ?>
 <!DOCTYPE html>
 <!--[if IE 9]>         <html class="ie9 no-focus" lang="en"> <![endif]-->
@@ -71,7 +96,6 @@ $res = mysqli_query($conn,$sql);
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
     <!-- END Stylesheets -->
-
 </head>
 <body>
 <!-- Page Container -->
@@ -106,7 +130,7 @@ $res = mysqli_query($conn,$sql);
                 </button>
                 <span>
                             <img class="img-avatar img-avatar32" src="assets/img/avatars/avatar10.jpg" alt="">
-                            <span class="font-w600 push-10-l">Keith Simpson</span>
+                            <span class="font-w600 push-10-l">Craig Stone</span>
                         </span>
             </div>
             <!-- END Side Header -->
@@ -184,36 +208,36 @@ $res = mysqli_query($conn,$sql);
                                     <ul class="nav-users remove-margin-b">
                                         <li>
                                             <a href="base_pages_profile.html">
-                                                <img class="img-avatar" src="assets/img/avatars/avatar7.jpg" alt="">
-                                                <i class="fa fa-circle text-success"></i> Julia Cole
+                                                <img class="img-avatar" src="assets/img/avatars/avatar2.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Evelyn Willis
                                                 <div class="font-w400 text-muted"><small>Copywriter</small></div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="base_pages_profile.html">
-                                                <img class="img-avatar" src="assets/img/avatars/avatar14.jpg" alt="">
-                                                <i class="fa fa-circle text-success"></i> John Parker
+                                                <img class="img-avatar" src="assets/img/avatars/avatar16.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Ryan Hall
                                                 <div class="font-w400 text-muted"><small>Web Developer</small></div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="base_pages_profile.html">
-                                                <img class="img-avatar" src="assets/img/avatars/avatar7.jpg" alt="">
-                                                <i class="fa fa-circle text-success"></i> Emma Cooper
+                                                <img class="img-avatar" src="assets/img/avatars/avatar5.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Lisa Gordon
                                                 <div class="font-w400 text-muted"><small>Web Designer</small></div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="base_pages_profile.html">
-                                                <img class="img-avatar" src="assets/img/avatars/avatar1.jpg" alt="">
-                                                <i class="fa fa-circle text-warning"></i> Amy Hunter
+                                                <img class="img-avatar" src="assets/img/avatars/avatar6.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Evelyn Willis
                                                 <div class="font-w400 text-muted"><small>Photographer</small></div>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="base_pages_profile.html">
-                                                <img class="img-avatar" src="assets/img/avatars/avatar12.jpg" alt="">
-                                                <i class="fa fa-circle text-warning"></i> Roger Hart
+                                                <img class="img-avatar" src="assets/img/avatars/avatar9.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Donald Barnes
                                                 <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
                                             </a>
                                         </li>
@@ -425,114 +449,323 @@ $res = mysqli_query($conn,$sql);
     require ROOT_PATH."includes/nav_left.inc.php";
     ?>
 
+    <!-- Header -->
+    <header id="header-navbar" class="content-mini content-mini-full">
+        <!-- Header Navigation Right -->
+        <ul class="nav-header pull-right">
+            <li>
+                <div class="btn-group">
+                    <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
+                        <img src="assets/img/avatars/avatar10.jpg" alt="Avatar">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li class="dropdown-header">Profile</li>
+                        <li>
+                            <a tabindex="-1" href="base_pages_inbox.html">
+                                <i class="si si-envelope-open pull-right"></i>
+                                <span class="badge badge-primary pull-right">3</span>Inbox
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="base_pages_profile.html">
+                                <i class="si si-user pull-right"></i>
+                                <span class="badge badge-success pull-right">1</span>Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="javascript:void(0)">
+                                <i class="si si-settings pull-right"></i>Settings
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Actions</li>
+                        <li>
+                            <a tabindex="-1" href="base_pages_lock.html">
+                                <i class="si si-lock pull-right"></i>Lock Account
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" href="base_pages_login.html">
+                                <i class="si si-logout pull-right"></i>Log out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <button class="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" type="button">
+                    <i class="fa fa-tasks"></i>
+                </button>
+            </li>
+        </ul>
+        <!-- END Header Navigation Right -->
+
+        <!-- Header Navigation Left -->
+        <ul class="nav-header pull-left">
+            <li class="hidden-md hidden-lg">
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <button class="btn btn-default" data-toggle="layout" data-action="sidebar_toggle" type="button">
+                    <i class="fa fa-navicon"></i>
+                </button>
+            </li>
+            <li class="hidden-xs hidden-sm">
+                <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
+                <button class="btn btn-default" data-toggle="layout" data-action="sidebar_mini_toggle" type="button">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+            </li>
+            <li>
+                <!-- Opens the Apps modal found at the bottom of the page, before including JS code -->
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#apps-modal" type="button">
+                    <i class="si si-grid"></i>
+                </button>
+            </li>
+            <li class="visible-xs">
+                <!-- Toggle class helper (for .js-header-search below), functionality initialized in App() -> uiToggleClass() -->
+                <button class="btn btn-default" data-toggle="class-toggle" data-target=".js-header-search" data-class="header-search-xs-visible" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </li>
+            <li class="js-header-search header-search">
+                <form class="form-horizontal" action="base_pages_search.html" method="post">
+                    <div class="form-material form-material-primary input-group remove-margin-t remove-margin-b">
+                        <input class="form-control" type="text" id="base-material-text" name="base-material-text" placeholder="Search..">
+                        <span class="input-group-addon"><i class="si si-magnifier"></i></span>
+                    </div>
+                </form>
+            </li>
+        </ul>
+        <!-- END Header Navigation Left -->
+    </header>
+    <!-- END Header -->
+
     <!-- Main Container -->
     <main id="main-container">
-
-        <!-- Page Header -->
-        <div class="content bg-gray-lighter">
-            <div class="row items-push">
-                <div class="col-sm-7">
-                    <h1 class="page-heading">
-                        Contacts <small>All people in the right place!</small>
-                    </h1>
-                </div>
-                <div class="col-sm-5 text-right hidden-xs">
-                    <ol class="breadcrumb push-10-t">
-                        <li>Generic</li>
-                        <li><a class="link-effect" href="">Contacts</a></li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        <!-- END Page Header -->
-
         <!-- Page Content -->
-        <div class="content">
-            <div class="row">
-                <?php
-                while (!!$rows = mysqli_fetch_assoc($res)){
-                    echo "<div class=\"col-sm-6 col-md-4 col-lg-3\">
-                            <!-- Contact -->
-                            <div class=\"block block-rounded\">
-                                <div class=\"block-header\">
-                                    <ul class=\"block-options\">
-                                        <li>
-                                            <button type=\"button\" data-toggle=\"modal\" data-target=\"#modal-contact-edit\">
-                                                <i class=\"si si-pencil\"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                    <div class=\"block-title\">{$rows['username']}</div>
-                                </div>
-                                <div class=\"block-content block-content-full bg-primary text-center\">
-                                    <img class=\"img-avatar img-avatar-thumb\" src=\"assets/img/avatars/avatar16.jpg{$rows['face']}\" alt=\"\">
-                                    <div class=\"font-s13 push-10-t\">{$rows['username']}</div>
-                                </div>
-                                <div class=\"block-content\">
-                                    <div class=\"text-center push\">
-                                        <a class=\"text-default\" href=\"chat.php?id={$rows['id']}\">
-                                            <i class=\"fa fa-2x fa-fw fa-envelope-o\" title='发消息'></i>
-                                        </a>
-                                        <a class=\"text-info\" href=\"javascript:void(0)\">
-                                            <i class=\"fa fa-2x fa-fw fa-twitter-square\"></i>
-                                        </a>
-                                        <a class=\"text-danger\" href=\"javascript:void(0)\">
-                                            <i class=\"fa fa-2x fa-fw fa-youtube-square\"></i>
-                                        </a>
-                                    </div>
-                                    <table class=\"table table-borderless table-striped font-s13\">
-                                        <tbody>
-                                            <tr>
-                                                <td class=\"font-w600\">手机</td>
-                                                <td>{$rows['phone']}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class=\"font-w600\">邮箱</td>
-                                                <td>{$rows['email']}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- END Contact -->
-                        </div>";
-                }
-                ?>
+        <!-- Chat layout and demo functionality is initialized in js/pages/base_ui_chat.js -->
+        <!--
+            You can use the following JS function to add a message to a chat window:
 
-            </div>
-            <nav aria-label="Page navigation" style="float: right">
-                <ul class="pagination pagination-lg">
-                    <li>
-                        <a href="contacts.php?page=<?php echo ($page-1<1 ? 1 : $page-1)?>" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
+            BaseUIChat.addMessage($chatId, $chatMsg, $chatMsgLevel)
+
+            $chatId         : the data-chat-id attribute of your chat window
+            $chatMsg        : the message you would like to add
+            $chatMsgLevel   : 'self' the user sends the message, '' empty if the user receives the message (changes its style)
+        -->
+        <div class="js-chat-container content content-full" data-chat-mode="full">
+            <!-- Full Chat -->
+            <div class="block remove-margin-b">
+                <ul class="js-chat-head nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                        <a href="#chat-window1">
+                            <img class="img-avatar img-avatar16" src="assets/img/avatars/avatar3.jpg" alt="">
+                            <span class="push-5-l">Evelyn</span>
                         </a>
                     </li>
-                    <?php
-                    for($i=1;$i<=$pageList;$i++){
-                        if($page == $i){
-                            echo "<li class='active'><a href='contacts.php?page={$i}'>$i</a></li>";
-                        }
-                        else{
-                            echo "<li><a href='contacts.php?page={$i}'>$i</a></li>";
-                        }
-
-                    }
-                    ?>
                     <li>
-                        <a href="contacts.php?page=<?php echo ($page+1>$pageList ? $pageList : $page+1)?>" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
+                        <a href="#chat-window2">
+                            <img class="img-avatar img-avatar16" src="assets/img/avatars/avatar10.jpg" alt="">
+                            <span class="push-5-l">John</span>
+                        </a>
+                    </li>
+                    <li class="pull-right">
+                        <a href="#chat-people">
+                            <i class="si si-users"></i>
                         </a>
                     </li>
                 </ul>
-            </nav>
+                <div class="tab-content overflow-hidden">
+                    <!-- Chat Window 1 -->
+                    <div class="tab-pane fade in active" id="chat-window1">
+                        <div class="js-chat-talk overflow-y-auto block-content block-content-full" data-chat-id="1">
+                            <!-- Messages -->
+<!--                            <div class="font-s12 text-muted text-center push-20-t push-15"><em>Yesterday</em></div>-->
+<!--                            <div class="block block-rounded block-transparent push-15 push-50-l">-->
+<!--                                <div class="block-content block-content-full block-content-mini bg-gray-lighter">Hi there!</div>-->
+<!--                            </div>-->
+<!--                            <div class="block block-rounded block-transparent push-15 push-50-l">-->
+<!--                                <div class="block-content block-content-full block-content-mini bg-gray-lighter">How are you?</div>-->
+<!--                            </div>-->
+<!--                            <div class="font-s12 text-muted text-center push-20-t push-10"><em>Today</em></div>-->
+<!--                            <div class="block block-rounded block-transparent push-15 push-50-r">-->
+<!--                                <div class="block-content block-content-full block-content-mini bg-gray-light">I'm fine, thanks! I hope you are doing great, too!</div>-->
+<!--                            </div>-->
+                            <!-- END Messages -->
+                        </div>
+                        <div class="block-content block-content-full block-content-mini">
+                            <form action="chat.php?action=write" method="post">
+                                <input type="hidden" value="<?php echo $html['toUser']?>" name="toUser">
+                                <input class="js-chat-input form-control" type="text" data-target-chat-id="1" placeholder="Type a message and hit enter.." name="content">
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Chat Window 1 -->
+
+                    <!-- Chat Window 2 -->
+                    <div class="tab-pane fade" id="chat-window2">
+                        <div class="js-chat-talk overflow-y-auto block-content block-content-full" data-chat-id="2">
+                            <!-- Messages -->
+                            <div class="font-s12 text-muted text-center push-20-t push-15"><em>3 hours ago</em></div>
+                            <div class="block block-rounded block-transparent push-15 push-50-l">
+                                <div class="block-content block-content-full block-content-mini bg-gray-lighter">Hi Admin!</div>
+                            </div>
+                            <div class="block block-rounded block-transparent push-15 push-50-l">
+                                <div class="block-content block-content-full block-content-mini bg-gray-lighter">Can you help me out?</div>
+                            </div>
+                            <div class="block block-rounded block-transparent push-15 push-50-l">
+                                <div class="block-content block-content-full block-content-mini bg-gray-lighter">I'm building a new app and I would like your opinion!</div>
+                            </div>
+                            <div class="font-s12 text-muted text-center push-20-t push-10"><em>1 hour ago</em></div>
+                            <div class="block block-rounded block-transparent push-15 push-50-r">
+                                <div class="block-content block-content-full block-content-mini bg-gray-light">Hey John, sure thing, feel free to let me know!</div>
+                            </div>
+                            <!-- END Messages -->
+                        </div>
+                        <div class="js-chat-form block-content block-content-full block-content-mini">
+                            <form action="?action=write" method="post">
+                                <input class="js-chat-input form-control" type="text" data-target-chat-id="2" placeholder="Type a message and hit enter..">
+                            </form>
+                        </div>
+                    </div>
+                    <!-- END Chat Window 2 -->
+
+                    <!-- People -->
+                    <div class="tab-pane fade fade-up" id="chat-people">
+                        <div class="js-chat-people overflow-y-auto block-content block-content-full">
+                            <div class="row remove-margin">
+                                <div class="col-sm-4">
+                                    <h3 class="text-success push-20-t push">Online</h3>
+                                    <ul class="nav-users push-10-t push">
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar3.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Sara Holland
+                                                <div class="font-w400 text-muted"><small>Web Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar13.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Ethan Howard
+                                                <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar5.jpg" alt="">
+                                                <i class="fa fa-circle text-success"></i> Ashley Welch
+                                                <div class="font-w400 text-muted"><small>Photographer</small></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h3 class="text-warning push-20-t push">Away</h3>
+                                    <ul class="nav-users push-10-t push">
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar2.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Amber Walker
+                                                <div class="font-w400 text-muted"><small>Web Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar12.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Joshua Munoz
+                                                <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar6.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Susan Elliott
+                                                <div class="font-w400 text-muted"><small>Photographer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar12.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Eugene Burke
+                                                <div class="font-w400 text-muted"><small>Web Developer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar1.jpg" alt="">
+                                                <i class="fa fa-circle text-warning"></i> Denise Watson
+                                                <div class="font-w400 text-muted"><small>Photographer</small></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h3 class="text-muted push-20-t push">Offline</h3>
+                                    <ul class="nav-users push-10-t push">
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar1.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Amber Walker
+                                                <div class="font-w400 text-muted"><small>Web Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar15.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Donald Barnes
+                                                <div class="font-w400 text-muted"><small>Web Developer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar5.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Susan Elliott
+                                                <div class="font-w400 text-muted"><small>Photographer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar15.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Bruce Edwards
+                                                <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar5.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Amber Walker
+                                                <div class="font-w400 text-muted"><small>Web Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar14.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Joshua Munoz
+                                                <div class="font-w400 text-muted"><small>Graphic Designer</small></div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                <img class="img-avatar" src="assets/img/avatars/avatar5.jpg" alt="">
+                                                <i class="fa fa-circle text-muted"></i> Amanda Powell
+                                                <div class="font-w400 text-muted"><small>Web Developer</small></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END People -->
+                </div>
+            </div>
+            <!-- END Full Chat -->
         </div>
         <!-- END Page Content -->
     </main>
     <!-- END Main Container -->
-
-    <?php
-    mysqli_free_result($res);
-    ?>
 
     <!-- Footer -->
     <footer id="page-footer" class="content-mini content-mini-full font-s12 bg-gray-lighter clearfix">
@@ -589,123 +822,6 @@ $res = mysqli_query($conn,$sql);
 </div>
 <!-- END Apps Modal -->
 
-<!-- Contact Edit Modal -->
-<div class="modal fade" id="modal-contact-edit" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-popout">
-        <div class="modal-content">
-            <div class="block block-themed block-transparent remove-margin-b">
-                <div class="block-header bg-primary-dark">
-                    <ul class="block-options">
-                        <li>
-                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
-                        </li>
-                    </ul>
-                    <h3 class="block-title"><i class="fa fa-user-circle push-5-r"></i> Edit Contact</h3>
-                </div>
-                <div class="block-content">
-                    <form class="form-horizontal push-10-t push-10" action="base_pages_contacts.html" method="post" onsubmit="return false;">
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="push">
-                                    <img class="img-avatar" src="assets/img/avatars/avatar15.jpg" alt="">
-                                </div>
-                                <label for="contact-avatar">Select new avatar</label>
-                                <input type="file" id="contact-avatar" name="contact-avatar">
-                            </div>
-                        </div>
-                        <div class="form-group push-50-t">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="text" id="contact-name" name="contact-name" value="John Doe">
-                                    <label for="contact-name">Name</label>
-                                    <span class="input-group-addon"><i class="si si-user"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="email" id="contact-email" name="contact-email" value="user1@one.ui">
-                                    <label for="contact-email">Email</label>
-                                    <span class="input-group-addon"><i class="si si-envelope-open"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="text" id="contact-phone" name="contact-phone" value="+ 00 35874521">
-                                    <label for="contact-phone">Phone</label>
-                                    <span class="input-group-addon"><i class="si si-screen-smartphone"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group push-50-t">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="text" id="contact-facebook" name="contact-facebook" value="https://facebook.com/user.one.ui">
-                                    <label for="contact-facebook">Facebook</label>
-                                    <span class="input-group-addon"><i class="si si-social-facebook"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="text" id="contact-twitter" name="contact-twitter" value="https://twitter.com/user.one.ui">
-                                    <label for="contact-twitter">Twitter</label>
-                                    <span class="input-group-addon"><i class="si si-social-twitter"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating input-group">
-                                    <input class="form-control" type="text" id="contact-youtube" name="contact-youtube" value="https://youtube.com/user.one.ui">
-                                    <label for="contact-youtube">Youtube</label>
-                                    <span class="input-group-addon"><i class="si si-social-youtube"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group push-50-t">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating">
-                                    <select class="form-control" id="contact-work-title" name="contact-work-title" size="1">
-                                        <option value="1" selected>Web Designer</option>
-                                        <option value="2">Web Developer</option>
-                                        <option value="3">Photographer</option>
-                                        <option value="4">Author</option>
-                                        <option value="5">Graphic Designer</option>
-                                    </select>
-                                    <label for="contact-work-title">Work Title</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <div class="form-material form-material-primary floating">
-                                    <select class="form-control" id="contact-category" name="contact-category" size="1">
-                                        <option value="1" selected>Friends</option>
-                                        <option value="2">Work</option>
-                                        <option value="3">Family</option>
-                                    </select>
-                                    <label for="contact-category">Category</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-2">
-                                <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-check push-5-r"></i> Update Contact</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END Contact Edit Modal -->
-
 <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/bootstrap.min.js"></script>
@@ -716,5 +832,8 @@ $res = mysqli_query($conn,$sql);
 <script src="assets/js/core/jquery.placeholder.min.js"></script>
 <script src="assets/js/core/js.cookie.min.js"></script>
 <script src="assets/js/app.js"></script>
+
+<!-- Page JS Code -->
+<script src="assets/js/pages/base_ui_chat.js"></script>
 </body>
 </html>

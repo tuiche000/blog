@@ -13,6 +13,7 @@ header('Content-Type:text/html;charset=utf-8');
 error_reporting(E_ALL ^ E_NOTICE);
 
 //转换硬路径常量
+
 define('ROOT_PATH',substr(dirname(__FILE__),0,-8));
 
 //创建一个自动转移状态的常量
