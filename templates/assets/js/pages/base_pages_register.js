@@ -24,7 +24,7 @@ var BasePagesRegister = function() {
             rules: {
                 'register-username': {
                     required: true,
-                    minlength: 3
+                    minlength: 2
                 },
                 'register-email': {
                     required: true,

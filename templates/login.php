@@ -151,7 +151,7 @@ require "../includes/common.inc.php";
 </html>
 <script>
     //验证码
-    var _captcha = new captcha('checkCode',6);
+    var _captcha = new captcha('checkCode',4);
     _captcha.createCode();
     _captcha.checkCode.onclick = function(){
         _captcha.createCode();

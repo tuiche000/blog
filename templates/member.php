@@ -77,6 +77,124 @@ if($_SESSION['username']){
         <!-- END Stylesheets -->
     </head>
     <body>
+
+    <!-- Contact Edit Modal -->
+    <div class="modal fade" id="modal-contact-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-popout">
+            <div class="modal-content">
+                <div class="block block-themed block-transparent remove-margin-b">
+                    <div class="block-header bg-primary-dark">
+                        <ul class="block-options">
+                            <li>
+                                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title"><i class="fa fa-user-circle push-5-r"></i> Edit Contact</h3>
+                    </div>
+                    <div class="block-content">
+                        <form class="form-horizontal push-10-t push-10" action="../app/modify_ing.php" method="post">
+                            <input class="form-control" type="hidden" id="modify-id" name="modify-id" value="<?php echo $arr['id']?>">
+                            <!--                        <div class="form-group">-->
+                            <!--                            <div class="col-sm-8 col-sm-offset-2">-->
+                            <!--                                <div class="push">-->
+                            <!--                                    <img class="img-avatar" src="assets/img/avatars/avatar15.jpg" alt="">-->
+                            <!--                                </div>-->
+                            <!--                                <label for="contact-avatar">Select new avatar</label>-->
+                            <!--                                <input type="file" id="contact-avatar" name="contact-avatar">-->
+                            <!--                            </div>-->
+                            <!--                        </div>-->
+                            <div class="form-group push-50-t">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="password" id="modify-password" name="modify-password" value="<?php echo $arr['password']?>">
+                                        <label for="contact-name">密码</label>
+                                        <span class="input-group-addon"><i class="si si-user"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="email" id="modify-email" name="modify-email" value="<?php echo $arr['email']?>">
+                                        <label for="contact-email">邮箱</label>
+                                        <span class="input-group-addon"><i class="si si-envelope-open"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="text" id="modify-phone" name="modify-phone" value="<?php echo $arr['phone']?>">
+                                        <label for="contact-phone">手机</label>
+                                        <span class="input-group-addon"><i class="si si-screen-smartphone"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group push-50-t">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="text" id="contact-facebook" name="contact-facebook" value="https://facebook.com/user.one.ui">
+                                        <label for="contact-facebook">Facebook</label>
+                                        <span class="input-group-addon"><i class="si si-social-facebook"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="text" id="contact-twitter" name="contact-twitter" value="https://twitter.com/user.one.ui">
+                                        <label for="contact-twitter">Twitter</label>
+                                        <span class="input-group-addon"><i class="si si-social-twitter"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating input-group">
+                                        <input class="form-control" type="text" id="contact-youtube" name="contact-youtube" value="https://youtube.com/user.one.ui">
+                                        <label for="contact-youtube">Youtube</label>
+                                        <span class="input-group-addon"><i class="si si-social-youtube"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group push-50-t">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating">
+                                        <select class="form-control" id="modify-sex" name="modify-sex" size="1">
+                                            <option value="<?php echo $arr['sex']?>"  selected><?php echo $arr['sex']?></option>
+                                            <option value="男">男</option>
+                                            <option value="女">女</option>
+                                        </select>
+                                        <label for="contact-work-title">性别</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <div class="form-material form-material-primary floating">
+                                        <select class="form-control" id="contact-category" name="contact-category" size="1">
+                                            <option value="1" selected>Friends</option>
+                                            <option value="2">Work</option>
+                                            <option value="3">Family</option>
+                                        </select>
+                                        <label for="contact-category">Category</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-check push-5-r"></i>修改</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END Contact Edit Modal -->
+
+
         <!-- Page Container -->
         <!--
             Available Classes:
@@ -441,9 +559,9 @@ if($_SESSION['username']){
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li class="dropdown-header">Profile</li>
                                 <li>
-                                    <a tabindex="-1" href="base_pages_inbox.html">
+                                    <a tabindex="-1" href="inbox.php">
                                         <i class="si si-envelope-open pull-right"></i>
-                                        <span class="badge badge-primary pull-right">3</span>Inbox
+                                        <span class="badge badge-primary pull-right">3</span>收件箱
                                     </a>
                                 </li>
                                 <li>
@@ -577,7 +695,7 @@ if($_SESSION['username']){
                             <!-- Follow -->
                             <div class="block">
                                 <div class="block-content block-content-full text-center">
-                                    <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-plus text-success"></i> Follow</button>
+                                    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal-contact-edit"><i class="fa fa-fw fa-plus text-success"></i> 修改资料</button>
                                     <button class="btn btn-sm btn-default"><i class="fa fa-fw fa-inbox text-info"></i> Send Message</button>
                                 </div>
                             </div>

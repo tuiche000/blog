@@ -64,10 +64,10 @@
                     <?php
                     if($_SESSION['username']){
                         echo "<li><a href=\"member.php\"><i class=\"si si-speedometer\"></i>{$_SESSION['username']} | 个人中心</a></li>";
-                        echo "<li><a href=\"app/exit_login.php\"><i class=\"si si-speedometer\"></i>退出</a></li>";
+                        echo "<li><a href=\"../app/exit_login.php\"><i class=\"si si-speedometer\"></i>退出</a></li>";
                     }else{
-                        echo "<li><a href=\"templates/login.php\"><i class=\"si si-speedometer\"></i>登录</a></li>
-            <li><a href=\"templates/register.php\"><i class=\"si si-speedometer\"></i>注册</a></li>";
+                        echo "<li><a href=\"login.php\"><i class=\"si si-speedometer\"></i>登录</a></li>
+            <li><a href=\"register.php\"><i class=\"si si-speedometer\"></i>注册</a></li>";
                     }
                     ?>
                     <li>

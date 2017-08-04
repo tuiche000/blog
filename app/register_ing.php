@@ -33,4 +33,4 @@ $INSERT_sql = "INSERT INTO user
 $INSERT_res = mysqli_query($conn,$INSERT_sql);
 $INSERT_rows = mysqli_fetch_assoc($INSERT_res);
 mysqli_close($conn);
-echo "<script>alert('注册成功！');window.location.href='../index.php'</script>";
+echo "<script>alert('注册成功！');window.location.href='../'</script>";

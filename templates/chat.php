@@ -8,7 +8,6 @@ if($_SESSION['username']){
         $message['toUser'] = $_POST['toUser'];
         $message['formUser'] = $_SESSION['username'];
         $message['content'] = $_POST['content'];
-        print_r($message);
         $sql1 = "INSERT INTO chat
 (
 chat_toUser,
@@ -25,7 +24,7 @@ NOW()
 )
 ";
         if ($conn->query($sql1) === TRUE) {
-            echo "新记录插入成功";
+            echo "<script>alert('新记录插入成功');window.location.href='contacts.php'</script>";
         } else {
             exit( "Error: " . $sql . "<br>" . $conn->error );
         }
@@ -561,7 +560,7 @@ NOW()
                     <li class="active">
                         <a href="#chat-window1">
                             <img class="img-avatar img-avatar16" src="assets/img/avatars/avatar3.jpg" alt="">
-                            <span class="push-5-l">Evelyn</span>
+                            <span class="push-5-l"><?php echo $html['toUser']?></span>
                         </a>
                     </li>
                     <li>

@@ -8,4 +8,4 @@
 require "../includes/common.inc.php";
 session_start();
 session_destroy();
-echo "<script>alert('退出成功');window.location.href='../index.php'</script>";
+echo "<script>alert('退出成功');window.location.href='../'</script>";
