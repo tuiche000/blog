@@ -14,7 +14,7 @@ if(isset($_GET['page'])){
 }
 $num_query = mysqli_query($conn,"SELECT id FROM user");
 $num = mysqli_num_rows($num_query);
-$pageSize = 8;
+$pageSize = 4;
 
 //获得数据的总和
 $pageList = ceil($num / $pageSize);
